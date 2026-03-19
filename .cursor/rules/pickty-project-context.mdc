@@ -46,6 +46,24 @@ alwaysApply: true
 - **AI 협업 방식**: 웹 AI(Gemini)로 설계·조사 → Cursor AI(Claude Sonnet)로 실제 구현
   - Gemini 제안 내용은 반드시 Claude가 버전/라이선스 등 사실 검증 후 적용
 
+## Git 계정 관리 규칙
+
+개인 PC와 회사 PC를 모두 사용하기 때문에 커밋 author 오염을 방지하기 위해 **각 프로젝트에 로컬 git config가 고정**되어 있다.
+
+| 구분 | 계정 | 이메일 |
+|---|---|---|
+| 개인 GitHub (사용) | `sleep5115` | `85235927+sleep5115@users.noreply.github.com` |
+| 개인 Gmail | — | `sleep5165@gmail.com` |
+| 회사 계정 (프로젝트에서 완전 배제) | `sleep5165` | `sleep5165@maybeone.co.kr` |
+
+- 두 프로젝트 모두 로컬 git config에 개인 noreply 이메일로 고정되어 있음
+- **회사 PC에서 클론 후 작업 시 반드시 아래 명령어 실행 (프로젝트 폴더 각각)**:
+  ```
+  git config user.email "85235927+sleep5115@users.noreply.github.com"
+  git config user.name "sleep5115"
+  ```
+- 절대로 `git config --global`로 설정하지 말 것 (회사 글로벌 config 오염 방지)
+
 ## 진행 현황 파일 관리 규칙
 
 웹 AI(Gemini)는 이 프로젝트 코드를 직접 볼 수 없다. 따라서 진행 현황을 별도 파일로 관리하며, **작업을 완료할 때마다 반드시 이 파일을 업데이트**해야 한다.
