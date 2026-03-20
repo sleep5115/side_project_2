@@ -5,7 +5,7 @@ alwaysApply: true
 
 # Pickty (픽티) — 프로젝트 컨텍스트
 
-티어표 메이커 & 이상형 월드컵 메이커. 스트리머 모드로 시청자 참여/집계/실시간 진행을 차별점으로 삼는다.
+티어표 만들기 & 이상형 월드컵 서비스. 누구나 방을 만들고 지인들과 함께 참여할 수 있으며, 실시간 참여/집계 기능은 스트리머-시청자 구도에서도 활용 가능한 차별화 포인트다.
 
 ## 레포 구조
 
@@ -34,8 +34,8 @@ alwaysApply: true
 
 ## 핵심 기능
 
-1. **Tier Maker** — 스트리머 방 생성 → 시청자 티어표 제출 → 통계/평균 시각화
-2. **Ideal Type World Cup** — 실시간 참여형 월드컵 진행 및 집계
+1. **Tier Maker** — 방 생성 → 참여자 티어표 제출 → 통계/평균 시각화
+2. **Ideal Type World Cup** — 방 생성 → 참여자 투표 → 실시간 집계
 3. **Template Platform** — 이미지 업로드, 티어/월드컵 템플릿 생성·공유
 4. **Auth** — 자체 로그인 + 소셜 로그인 (Google·Naver·Kakao 필수 / Chzzk·SOOP·Twitch 1차 확장 / Discord·X·Apple 차후 검토)
 
