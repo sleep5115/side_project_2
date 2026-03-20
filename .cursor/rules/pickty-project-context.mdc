@@ -84,6 +84,18 @@ Gemini에게 컨텍스트를 전달할 때는 이 파일 내용을 복사해서 
 - `CursorProjects/side_project_1/.cursor/rules/pickty-project-context.mdc`
 - `CursorProjects/side_project_2/.cursor/rules/pickty-project-context.mdc`
 
+## 브랜치 전략
+
+| 브랜치 | 용도 |
+|---|---|
+| `main` | 운영(배포) 전용 — 직접 push 금지 |
+| `dev` | 기본 개발 브랜치 — GitHub 디폴트 브랜치 |
+| `feat/*` | 기능 개발 (dev에서 분기 → dev로 merge) |
+
+- 평소 작업은 `dev` 브랜치에서 진행
+- 배포 시에만 `dev` → `main` merge
+- GitHub 디폴트 브랜치: `dev`
+
 ## 코딩 규칙
 
 - Frontend는 반드시 **App Router** 방식 사용 (`pages/` 금지)
