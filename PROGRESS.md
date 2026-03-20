@@ -143,15 +143,69 @@ src/main/kotlin/com/pickty/server/
 
 회사 PC에서 bizprint 프로젝트와 포트 충돌을 방지하기 위해 아래 포트를 사용한다.
 
-| 서비스 | 로컬 포트 | 비고 |
-|---|---|---|
-| side_project_1 (Next.js) | **3002** | bizprint-web:3000, bizprint-admin:3001 회피 |
-| side_project_2 (Spring Boot) | **8080** | 현재 비사용 포트 |
-| PostgreSQL (Docker) | **5442** → 5432 | 기본 5432 대신 오프셋 적용 |
-| Valkey (Docker) | **6380** → 6379 | 기본 6379 대신 오프셋 적용 |
+| 서비스 | 회사 PC 포트 | 집 PC 포트 | 비고 |
+|---|---|---|---|
+| side_project_1 (Next.js) | **3002** | **3002** | bizprint-web:3000, bizprint-admin:3001 회피 |
+| side_project_2 (Spring Boot) | **8080** | **8080** | |
+| PostgreSQL (Docker) | **5442** → 5432 | **5432** → 5432 | 회사만 오프셋 |
+| Valkey (Docker) | **6380** → 6379 | **6379** → 6379 | 회사만 오프셋 |
 
-Docker Compose 파일 위치: `CursorProjects/docker-compose.yml`
-Spring Boot 로컬 DB 설정: `side_project_2/src/main/resources/application-local.yaml` (gitignore됨)
+### Docker 계정 정보 (docker-compose.yml 기준)
+
+```
+PostgreSQL
+  DB명: pickty
+  username: pickty
+  password: pickty1234
+
+Valkey
+  password: (없음)
+```
+
+### Docker Compose 실행
+```bash
+# CursorProjects/ 폴더에서
+docker compose up -d
+```
+
+### application-local.yaml 내용 (gitignore됨 — 각 PC에서 직접 생성)
+
+**회사 PC** (`side_project_2/src/main/resources/application-local.yaml`):
+```yaml
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5442/pickty
+    username: pickty
+    password: pickty1234
+  data:
+    redis:
+      host: localhost
+      port: 6380
+      password:
+```
+
+**집 PC** (`side_project_2/src/main/resources/application-local.yaml`):
+```yaml
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pickty
+    username: pickty
+    password: pickty1234
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password:
+```
+
+### 집 PC 초기 세팅 순서 (side_project_2 레포 재생성 후)
+```bash
+git remote set-url origin https://github.com/sleep5115/side_project_2.git
+git pull origin main
+# application-local.yaml 위 집 PC 내용으로 직접 생성
+# CursorProjects/docker-compose.yml의 PostgreSQL 포트를 5432:5432, Valkey를 6379:6379로 수정 후:
+docker compose up -d
+```
 
 ---
 
