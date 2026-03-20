@@ -25,6 +25,9 @@
 ### 개발 환경
 - Docker Compose로 PostgreSQL 17 + Valkey 9 로컬 구동 (`CursorProjects/docker-compose.yml`)
 - DB 접속 정보는 `application-local.yaml`로 분리 후 gitignore 처리
+- 회사 PC Docker 컨테이너 정상 실행 확인 (PostgreSQL:5442, Valkey:6380)
+- Git 로컬 config 양쪽 프로젝트에 고정 (`sleep5115` / noreply 이메일)
+- side_project_2 GitHub 레포 재생성 완료 — 회사 계정 contributor에서 제거됨
 
 ### Frontend (`side_project_1`)
 - Next.js 16 + React 19 + Tailwind CSS v4 + TypeScript 기본 세팅 완료
@@ -209,17 +212,8 @@ docker compose up -d
 
 ---
 
-## ⚠️ 작업 필요: side_project_2 GitHub 레포 재생성
-
-- **이유**: 초기 커밋이 회사 이메일(`sleep5165@maybeone.co.kr`)로 push되어 `sleep5165` 계정이 contributor로 등록됨
-- **방법**: GitHub에서 `sleep5115/side_project_2` 레포 삭제 → 같은 이름으로 재생성 → 로컬에서 push
-- **집에서 작업할 때**: 레포 삭제 후 재생성하고 `git remote set-url` 또는 `git push -u origin main` 으로 연결
-
----
-
 ## 다음 작업 예정
 
-- [ ] ⚠️ side_project_2 GitHub 레포 삭제 후 재생성 (contributor 정리)
 - [ ] Backend: Spring Security + OAuth2 설정 (SecurityConfig)
 - [ ] Backend: UserRepository, SocialAccountRepository
 - [ ] Backend: OAuth2 로그인 흐름 구현 (Chzzk, Google)
