@@ -39,5 +39,6 @@ out/
 ### Kotlin ###
 .kotlin
 
-### Local secrets ###
+### Local secrets & settings ###
 src/main/resources/application-local.yaml
+gradle.properties
