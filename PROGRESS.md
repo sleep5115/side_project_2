@@ -139,8 +139,33 @@ src/main/kotlin/com/pickty/server/
 
 ---
 
+## 로컬 개발 포트 구성
+
+회사 PC에서 bizprint 프로젝트와 포트 충돌을 방지하기 위해 아래 포트를 사용한다.
+
+| 서비스 | 로컬 포트 | 비고 |
+|---|---|---|
+| side_project_1 (Next.js) | **3002** | bizprint-web:3000, bizprint-admin:3001 회피 |
+| side_project_2 (Spring Boot) | **8080** | 현재 비사용 포트 |
+| PostgreSQL (Docker) | **5442** → 5432 | 기본 5432 대신 오프셋 적용 |
+| Valkey (Docker) | **6380** → 6379 | 기본 6379 대신 오프셋 적용 |
+
+Docker Compose 파일 위치: `CursorProjects/docker-compose.yml`
+Spring Boot 로컬 DB 설정: `side_project_2/src/main/resources/application-local.yaml` (gitignore됨)
+
+---
+
+## ⚠️ 작업 필요: side_project_2 GitHub 레포 재생성
+
+- **이유**: 초기 커밋이 회사 이메일(`sleep5165@maybeone.co.kr`)로 push되어 `sleep5165` 계정이 contributor로 등록됨
+- **방법**: GitHub에서 `sleep5115/side_project_2` 레포 삭제 → 같은 이름으로 재생성 → 로컬에서 push
+- **집에서 작업할 때**: 레포 삭제 후 재생성하고 `git remote set-url` 또는 `git push -u origin main` 으로 연결
+
+---
+
 ## 다음 작업 예정
 
+- [ ] ⚠️ side_project_2 GitHub 레포 삭제 후 재생성 (contributor 정리)
 - [ ] Backend: Spring Security + OAuth2 설정 (SecurityConfig)
 - [ ] Backend: UserRepository, SocialAccountRepository
 - [ ] Backend: OAuth2 로그인 흐름 구현 (Chzzk, Google)
