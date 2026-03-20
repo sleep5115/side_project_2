@@ -25,9 +25,8 @@
 ### 개발 환경
 - Docker Compose로 PostgreSQL 17 + Valkey 9 로컬 구동 (`CursorProjects/docker-compose.yml`)
 - DB 접속 정보는 `application-local.yaml`로 분리 후 gitignore 처리
-- 회사 PC Docker 컨테이너 정상 실행 확인 (PostgreSQL:5442, Valkey:6380)
-- Git 로컬 config 양쪽 프로젝트에 고정 (`sleep5115` / noreply 이메일)
-- side_project_2 GitHub 레포 재생성 완료 — 회사 계정 contributor에서 제거됨
+- `application-local.yaml`에 OAuth2(Google) 및 JWT secret 설정 추가 (로컬 전용)
+- **로컬 DB 접속 정보**: `localhost:5432` / DB: `pickty` / User: `pickty` / PW: `pickty1234`
 
 ### Frontend (`side_project_1`)
 - Next.js 16 + React 19 + Tailwind CSS v4 + TypeScript 기본 세팅 완료
@@ -138,76 +137,6 @@ src/main/kotlin/com/pickty/server/
     │   └── BaseTimeEntity.kt   # createdAt, updatedAt 공통 상속
     └── config/
         └── JpaAuditingConfig.kt
-```
-
----
-
-## 로컬 개발 포트 구성
-
-회사 PC에서 bizprint 프로젝트와 포트 충돌을 방지하기 위해 아래 포트를 사용한다.
-
-| 서비스 | 회사 PC 포트 | 집 PC 포트 | 비고 |
-|---|---|---|---|
-| side_project_1 (Next.js) | **3002** | **3002** | bizprint-web:3000, bizprint-admin:3001 회피 |
-| side_project_2 (Spring Boot) | **8080** | **8080** | |
-| PostgreSQL (Docker) | **5442** → 5432 | **5432** → 5432 | 회사만 오프셋 |
-| Valkey (Docker) | **6380** → 6379 | **6379** → 6379 | 회사만 오프셋 |
-
-### Docker 계정 정보 (docker-compose.yml 기준)
-
-```
-PostgreSQL
-  DB명: pickty
-  username: pickty
-  password: pickty1234
-
-Valkey
-  password: (없음)
-```
-
-### Docker Compose 실행
-```bash
-# CursorProjects/ 폴더에서
-docker compose up -d
-```
-
-### application-local.yaml 내용 (gitignore됨 — 각 PC에서 직접 생성)
-
-**회사 PC** (`side_project_2/src/main/resources/application-local.yaml`):
-```yaml
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5442/pickty
-    username: pickty
-    password: pickty1234
-  data:
-    redis:
-      host: localhost
-      port: 6380
-      password:
-```
-
-**집 PC** (`side_project_2/src/main/resources/application-local.yaml`):
-```yaml
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/pickty
-    username: pickty
-    password: pickty1234
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      password:
-```
-
-### 집 PC 초기 세팅 순서 (side_project_2 레포 재생성 후)
-```bash
-git remote set-url origin https://github.com/sleep5115/side_project_2.git
-git pull origin main
-# application-local.yaml 위 집 PC 내용으로 직접 생성
-# CursorProjects/docker-compose.yml의 PostgreSQL 포트를 5432:5432, Valkey를 6379:6379로 수정 후:
-docker compose up -d
 ```
 
 ---
