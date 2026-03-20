@@ -14,7 +14,11 @@
 | Backend 기초 | ✅ 완료 | |
 | Auth — 엔티티/도메인 설계 | ✅ 완료 | User, SocialAccount 엔티티 완성 |
 | Auth — 로그인/회원가입 UI | ✅ 완료 | 소셜 로그인 버튼 포함 |
-| Auth — 백엔드 API 연동 | ⬜ 미시작 | Spring Security OAuth2 구현 필요 |
+| Auth — SecurityConfig (Guest First) | ✅ 완료 | 기본 permitAll, /api/v1/user/** 인증 요구 |
+| Auth — Repository | ✅ 완료 | UserRepository, SocialAccountRepository |
+| Auth — JWT 인프라 | ✅ 완료 | JwtTokenProvider, JwtAuthenticationFilter, JwtConfig |
+| Auth — Google OAuth2 + JWT 발급 | ✅ 완료 | CustomOAuth2UserService, OAuth2SuccessHandler, RefreshToken(Valkey) |
+| Auth — 프론트 콜백 처리 | ⬜ 미시작 | /auth/callback 페이지, accessToken 저장 |
 | Tier Maker | ⬜ 미시작 | |
 | Ideal Type World Cup | ⬜ 미시작 | |
 
@@ -28,6 +32,9 @@
 - 회사 PC Docker 컨테이너 정상 실행 확인 (PostgreSQL:5442, Valkey:6380)
 - Git 로컬 config 양쪽 프로젝트에 고정 (`sleep5115` / noreply 이메일)
 - side_project_2 GitHub 레포 재생성 완료 — 회사 계정 contributor에서 제거됨
+- `gradle.properties`에 `org.gradle.java.home` 고정 → 시스템 JAVA_HOME 건드리지 않고 JDK 25 사용
+- 프론트(port 3002) + 백엔드(port 8080) 동시 기동 확인
+- 브랜치 전략 확정: `dev` 개발, `main` 운영 전용, GitHub 디폴트 브랜치 `dev`
 
 ### Frontend (`side_project_1`)
 - Next.js 16 + React 19 + Tailwind CSS v4 + TypeScript 기본 세팅 완료
@@ -43,6 +50,7 @@
 - **소셜 로그인 버튼 구현 완료** (UI only, API 미연동)
   - 주요: Google, 네이버, 카카오 (와이드 버튼)
   - 방송: Twitch, 치지직, SOOP (원형 버튼)
+- 서비스 문구 전면 수정: "시청자 참여형 랭킹 메이커" → "티어표 만들기 & 이상형 월드컵" (layout, page, login, signup)
 
 ### Backend (`side_project_2`)
 - Spring Boot 4.0.3 + Kotlin 2.2.21 + JPA + Security + Validation 기본 세팅 완료
@@ -50,10 +58,17 @@
 - `spring-boot-starter-data-redis` 의존성 추가
 - JVM 타겟 불일치 해결: JDK 25 toolchain + 컴파일 타겟 JVM 24 (Kotlin 2.4.0 이후 25로 업그레이드 예정)
 - 서버 정상 기동 확인 (`localhost:8080`)
+- **Guest First 기획 반영**: SecurityConfig 기본 `permitAll()`, `/api/v1/user/**`만 인증 요구
 - **패키지 구조**: `com.pickty.server`
-  - `domain/user/` — User, SocialAccount, Provider, Role
+  - `domain/user/` — User, SocialAccount, Provider, Role, UserRepository, SocialAccountRepository
   - `global/common/` — BaseTimeEntity
-  - `global/config/` — JpaAuditingConfig
+  - `global/config/` — JpaAuditingConfig, SecurityConfig, JwtConfig
+  - `global/jwt/` — JwtProperties, JwtTokenProvider, JwtAuthenticationFilter
+  - `global/oauth2/` — CookieUtils, HttpCookieOAuth2AuthorizationRequestRepository
+  - `global/security/` — UnauthorizedEntryPoint
+  - `domain/auth/` — PrincipalDetails, OAuth2UserInfo
+  - `domain/auth/service/` — CustomOAuth2UserService, RefreshTokenService
+  - `domain/auth/handler/` — OAuth2SuccessHandler
 
 ---
 
@@ -214,8 +229,8 @@ docker compose up -d
 
 ## 다음 작업 예정
 
-- [ ] Backend: Spring Security + OAuth2 설정 (SecurityConfig)
-- [ ] Backend: UserRepository, SocialAccountRepository
-- [ ] Backend: OAuth2 로그인 흐름 구현 (Chzzk, Google)
+- [ ] Google Cloud Console에서 OAuth2 Client ID/Secret 발급 후 application-local.yaml에 입력
+- [ ] Frontend: /auth/callback 페이지 구현 (accessToken 수신 → 저장)
+- [ ] Frontend: 로그인 페이지 Google 소셜 로그인 버튼 → /oauth2/authorization/google 연결
 - [ ] Backend: JWT 발급/검증 필터
 - [ ] Frontend: 로그인/회원가입 API 실제 연동
